@@ -202,9 +202,9 @@ class VendDataService
         if(isset($processedInput['Type'])) {
             switch($processedInput['Type']) {
             case 'P':
-                $saveVendData = false;
-                break;
             case 'TEMPERATURECONTROL':
+            case 'TIME':
+            case 'PWRON':
                 $saveVendData = false;
                 break;
             default:
