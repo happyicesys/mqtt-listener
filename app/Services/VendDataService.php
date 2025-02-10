@@ -193,6 +193,8 @@ class VendDataService
         if(isset($processedInput['Type'])) {
             switch($processedInput['Type']) {
             case 'P':
+                $saveVendData = false;
+                break;
             case 'TEMPERATURECONTROL':
                 $saveVendData = false;
                 break;
