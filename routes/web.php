@@ -1,8 +1,8 @@
 <?php
-
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    auth()->loginUsingId(1);
+    Auth::loginUsingId(1);
     return view('welcome');
 });
