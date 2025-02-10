@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class VendData extends Model
 {
     protected $fillable = [
+        'topic',
         'type',
         'value',
         'vend_code',

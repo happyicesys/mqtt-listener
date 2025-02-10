@@ -11,14 +11,16 @@ class StoreVendData implements ShouldQueue
     use Queueable;
 
     protected $vendCode;
+    protected $topic;
     protected $input;
 
     /**
      * Create a new job instance.
      */
-    public function __construct($vendCode, $input)
+    public function __construct($vendCode, $topic, $input)
     {
         $this->vendCode = $vendCode;
+        $this->topic = $topic;
         $this->input = $input;
     }
 
@@ -30,6 +32,7 @@ class StoreVendData implements ShouldQueue
         VendData::create([
             'vend_code' => $this->vendCode,
             'value' => $this->input,
+            'topic' => $this->topic,
             'type' => $this->input['Type'],
         ]);
     }

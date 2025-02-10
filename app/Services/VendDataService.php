@@ -9,11 +9,11 @@ use PhpMqtt\Client\Facades\MQTT;
 class VendDataService
 {
 
-    public function store($input)
+    public function store($topic, $input)
     {
         $standardizedVendData = $this->standardizedVendData($input);
         $decodedData = $this->decodeVendData($standardizedVendData);
-        $this->processVendData($standardizedVendData, $decodedData);
+        $this->processVendData($topic, $standardizedVendData, $decodedData);
     }
 
   public function standardizedVendData($input)
@@ -183,7 +183,7 @@ class VendDataService
     return $data;
   }
 
-  public function processVendData($originalInput, $processedInput)
+  public function processVendData($topic, $originalInput, $processedInput)
   {
     $saveVendData = true;
 
@@ -193,6 +193,7 @@ class VendDataService
         if(isset($processedInput['Type'])) {
             switch($processedInput['Type']) {
             case 'P':
+            case 'TEMPERATURECONTROL':
                 $saveVendData = false;
                 break;
             default:
@@ -200,7 +201,7 @@ class VendDataService
             }
 
             if($saveVendData) {
-                StoreVendData::dispatch($vendCode, $processedInput);
+                StoreVendData::dispatch($vendCode, $topic, $processedInput);
             }
         }
 

@@ -22,7 +22,7 @@ class SubscribeMqttService
   {
     $mqtt = MQTT::connection();
     $mqtt->subscribe(self::SUBSCRIBED_TOPIC, function (string $topic, string $message) {
-        $this->vendDataService->store($message);
+        $this->vendDataService->store($topic, $message);
     }, 1);
     $mqtt->loop(true);
   }
