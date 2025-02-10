@@ -11,9 +11,18 @@ class VendDataService
 
     public function store($topic, $input)
     {
+      if($topic[0] == 'C' and $topic[1] == 'V') {
         $standardizedVendData = $this->standardizedVendData($input);
         $decodedData = $this->decodeVendData($standardizedVendData);
-        $this->processVendData($topic, $standardizedVendData, $decodedData);
+      }
+
+      if($topic[0] == 'C' and $topic[1] == 'M') {
+        $inputArr = explode(',', $input);
+        $decodedData = collect(json_decode(base64_decode($inputArr[2])));
+        $standardizedVendData['m'] = substr($topic, 2);
+      }
+
+      $this->processVendData($topic, $standardizedVendData, $decodedData);
     }
 
   public function standardizedVendData($input)
