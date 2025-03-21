@@ -12,16 +12,18 @@ class StoreVendData implements ShouldQueue
 
     protected $vendCode;
     protected $topic;
-    protected $input;
+    protected $originalInput;
+    protected $processedInput;
 
     /**
      * Create a new job instance.
      */
-    public function __construct($vendCode, $topic, $input)
+    public function __construct($vendCode, $topic, $originalInput, $processedInput)
     {
         $this->vendCode = $vendCode;
         $this->topic = $topic;
-        $this->input = $input;
+        $this->originalInput = $originalInput;
+        $this->processedInput = $processedInput;
     }
 
     /**
@@ -31,9 +33,10 @@ class StoreVendData implements ShouldQueue
     {
         VendData::create([
             'vend_code' => $this->vendCode,
-            'value' => $this->input,
+            'value' => $this->processedInput,
+            'raw' => $this->originalInput,
             'topic' => $this->topic,
-            'type' => $this->input['Type'],
+            'type' => $this->processedInput['Type'],
         ]);
     }
 }

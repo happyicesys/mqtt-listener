@@ -204,7 +204,7 @@ class VendDataService
             case 'P':
             case 'TEMPERATURECONTROL':
             case 'TIME':
-            case 'PWRON':
+            // case 'PWRON':
                 $saveVendData = false;
                 break;
             default:
@@ -212,7 +212,7 @@ class VendDataService
             }
 
             if($saveVendData) {
-                StoreVendData::dispatch($vendCode, $topic, $processedInput);
+                StoreVendData::dispatchSync($vendCode, $topic, $originalInput, $processedInput);
             }
         }
 
