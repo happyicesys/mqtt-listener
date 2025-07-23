@@ -22,6 +22,8 @@ class StoreVendData implements ShouldQueue
      */
     public function __construct($vendCode, $topic, $originalInput, $processedInput, $connection, $ipAddress)
     {
+        $this->connection = $connection;
+        $this->ipAddress = $ipAddress;
         $this->vendCode = $vendCode;
         $this->topic = $topic;
         $this->originalInput = $originalInput;
