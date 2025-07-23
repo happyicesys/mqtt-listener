@@ -198,7 +198,7 @@ class VendDataService
     return $data;
   }
 
-  public function processVendData($topic, $originalInput, $processedInput, $ipAddress)
+  public function processVendData($topic, $originalInput, $processedInput, $connection, $ipAddress)
   {
     $saveVendData = true;
 
