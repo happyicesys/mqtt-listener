@@ -218,7 +218,7 @@ class VendDataService
             }
 
             if($saveVendData) {
-                StoreVendData::dispatchSync($vendCode, $topic, $originalInput, $processedInput, $connection, $ipAddress);
+                StoreVendData::dispatch($vendCode, $topic, $originalInput, $processedInput, $connection, $ipAddress);
             }
         }
 
