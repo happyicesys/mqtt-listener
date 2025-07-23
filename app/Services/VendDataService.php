@@ -9,20 +9,26 @@ use PhpMqtt\Client\Facades\MQTT;
 class VendDataService
 {
 
-    public function store($topic, $input)
+    public function store($topic, $input, $connection = 'http', $ipAddress = null)
     {
-      if($topic[0] == 'C' and $topic[1] == 'V') {
+      if($topic) {
+        if($topic[0] == 'C' and $topic[1] == 'V') {
+          $standardizedVendData = $this->standardizedVendData($input);
+          $decodedData = $this->decodeVendData($standardizedVendData);
+        }
+
+        if($topic[0] == 'C' and $topic[1] == 'M') {
+          $inputArr = explode(',', $input);
+          $decodedData = collect(json_decode(base64_decode($inputArr[2])));
+          $standardizedVendData['m'] = substr($topic, 2);
+        }
+      }else {
         $standardizedVendData = $this->standardizedVendData($input);
         $decodedData = $this->decodeVendData($standardizedVendData);
       }
 
-      if($topic[0] == 'C' and $topic[1] == 'M') {
-        $inputArr = explode(',', $input);
-        $decodedData = collect(json_decode(base64_decode($inputArr[2])));
-        $standardizedVendData['m'] = substr($topic, 2);
-      }
 
-      $this->processVendData($topic, $standardizedVendData, $decodedData);
+      $this->processVendData($topic, $standardizedVendData, $decodedData, $connection, $ipAddress);
     }
 
   public function standardizedVendData($input)
@@ -192,7 +198,7 @@ class VendDataService
     return $data;
   }
 
-  public function processVendData($topic, $originalInput, $processedInput)
+  public function processVendData($topic, $originalInput, $processedInput, $ipAddress)
   {
     $saveVendData = true;
 
@@ -212,7 +218,7 @@ class VendDataService
             }
 
             if($saveVendData) {
-                StoreVendData::dispatchSync($vendCode, $topic, $originalInput, $processedInput);
+                StoreVendData::dispatchSync($vendCode, $topic, $originalInput, $processedInput, $connection, $ipAddress);
             }
         }
 
