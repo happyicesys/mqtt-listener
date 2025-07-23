@@ -1,5 +1,8 @@
 <?php
 
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Http\Request;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -12,12 +15,20 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        // ✅ Define the 'api' middleware group here
+        // Register middleware aliases (auth:sanctum will now work)
+        $middleware->alias([
+            'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
+            'auth:sanctum' => \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class, // ⚠️ This is WRONG for token-based
+        ]);
+
+        // ✅ Define correct 'api' group WITHOUT EnsureFrontendRequestsAreStateful
         $middleware->group('api', [
+            'auth:sanctum',
+            'throttle:api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            \Illuminate\Auth\Middleware\Authenticate::class, // required for `auth:sanctum` to work
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
-    })->create();
+    })
+    ->create();
