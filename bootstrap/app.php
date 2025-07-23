@@ -12,7 +12,11 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        // ✅ Define the 'api' middleware group here
+        $middleware->group('api', [
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \Illuminate\Auth\Middleware\Authenticate::class, // required for `auth:sanctum` to work
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

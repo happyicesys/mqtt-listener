@@ -10,7 +10,7 @@ class StoreVendData implements ShouldQueue
 {
     use Queueable;
 
-    protected $connection;
+    protected $incomingConnection;
     protected $ipAddress;
     protected $vendCode;
     protected $topic;
@@ -20,9 +20,9 @@ class StoreVendData implements ShouldQueue
     /**
      * Create a new job instance.
      */
-    public function __construct($vendCode, $topic, $originalInput, $processedInput, $connection, $ipAddress)
+    public function __construct($vendCode, $topic, $originalInput, $processedInput, $incomingConnection, $ipAddress)
     {
-        $this->connection = $connection;
+        $this->incomingConnection = $incomingConnection;
         $this->ipAddress = $ipAddress;
         $this->vendCode = $vendCode;
         $this->topic = $topic;
@@ -36,7 +36,7 @@ class StoreVendData implements ShouldQueue
     public function handle(): void
     {
         VendData::create([
-            'connection' => $this->connection,
+            'connection' => $this->incomingConnection,
             'ip_address' => $this->ipAddress,
             'vend_code' => $this->vendCode,
             'value' => $this->processedInput,
